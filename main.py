@@ -2,19 +2,20 @@
 
 import os
 import sys
-from openai import OpenAI
+import google.generativeai as genai
+from gtts import gTTS
 from moviepy.editor import VideoFileClip, AudioFileClip, CompositeVideoClip
 
 def check_requirements():
     """Check if all required files and environment variables are present"""
     
-    # Check for OpenAI API key
-    api_key = os.getenv('OPENAI_API_KEY')
+    # Check for Gemini API key
+    api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
-        print("ERROR: OpenAI API key not found!")
+        print("ERROR: Gemini API key not found!")
         print("Please set your API key as an environment variable:")
-        print("export OPENAI_API_KEY='your-api-key-here'")
-        print("Or create a .env file with OPENAI_API_KEY=your-api-key-here")
+        print("export GEMINI_API_KEY='your-api-key-here'")
+        print("Or create a .env file with GEMINI_API_KEY=your-api-key-here")
         return False
     
     # Check for background video
@@ -26,11 +27,13 @@ def check_requirements():
     return True
 
 def generate_script(topic):
-    """Generate a motivational script using OpenAI API"""
+    """Generate a motivational script using Google Gemini API"""
     
     print("Generating motivational script...")
     
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    # Configure Gemini API
+    genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+    model = genai.GenerativeModel('gemini-1.5-flash')
     
     prompt = f"""Write a motivational and inspiring script about {topic}. 
     The script should be:
@@ -42,16 +45,8 @@ def generate_script(topic):
     Please write only the script text, no additional formatting or instructions."""
     
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a motivational speaker who creates inspiring content."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=300
-        )
-        
-        script = response.choices[0].message.content.strip()
+        response = model.generate_content(prompt)
+        script = response.text.strip()
         
         # Save script to file
         with open('script.txt', 'w', encoding='utf-8') as f:
@@ -65,21 +60,17 @@ def generate_script(topic):
         return None
 
 def generate_voiceover(script):
-    """Generate voiceover audio from script using OpenAI TTS"""
+    """Generate voiceover audio from script using Google Text-to-Speech (Free)"""
     
     print("Generating voiceover...")
     
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-    
     try:
-        response = client.audio.speech.create(
-            model="tts-1",
-            voice="alloy",  # You can change this to: alloy, echo, fable, onyx, nova, shimmer
-            input=script
-        )
+        # Create TTS object with English language
+        # You can change the language code: 'en' (English), 'es' (Spanish), 'fr' (French), etc.
+        tts = gTTS(text=script, lang='en', slow=False)
         
         # Save audio to file
-        response.stream_to_file("voiceover.mp3")
+        tts.save("voiceover.mp3")
         print("Voiceover saved to 'voiceover.mp3'")
         return True
         

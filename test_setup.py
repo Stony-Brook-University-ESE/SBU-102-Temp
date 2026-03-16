@@ -19,10 +19,17 @@ def test_imports():
         return False
     
     try:
-        import openai
-        print("✓ OpenAI package imported successfully")
+        import google.generativeai
+        print("✓ Google Generative AI package imported successfully")
     except ImportError as e:
-        print(f"✗ OpenAI package import failed: {e}")
+        print(f"✗ Google Generative AI package import failed: {e}")
+        return False
+    
+    try:
+        import gtts
+        print("✓ gTTS (Google Text-to-Speech) imported successfully")
+    except ImportError as e:
+        print(f"✗ gTTS import failed: {e}")
         return False
     
     return True
@@ -62,13 +69,13 @@ def test_api_key():
     """Check if API key is set"""
     print("Checking API key configuration...")
     
-    api_key = os.getenv('OPENAI_API_KEY')
-    if api_key and api_key != 'your-openai-api-key-here':
-        print("✓ OPENAI_API_KEY environment variable is set")
+    api_key = os.getenv('GEMINI_API_KEY')
+    if api_key and api_key != 'your-gemini-api-key-here':
+        print("✓ GEMINI_API_KEY environment variable is set")
         return True
     else:
-        print("✗ OPENAI_API_KEY not properly configured")
-        print("  Set it with: export OPENAI_API_KEY='your-key-here'")
+        print("✗ GEMINI_API_KEY not properly configured")
+        print("  Set it with: export GEMINI_API_KEY='your-key-here'")
         print("  Or create a .env file with your API key")
         return False
 

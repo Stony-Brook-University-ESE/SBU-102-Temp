@@ -7,8 +7,8 @@ services:
       # and output files to be saved back to the host
       - .:/app
     environment:
-      # Pass the OpenAI API key from host environment to container
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # Pass the Gemini API key from host environment to container
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     stdin_open: true    # Allow interactive input
     tty: true          # Allocate a pseudo-TTY for interactive mode
 
@@ -17,5 +17,5 @@ services:
     volumes:
       - .:/app
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     command: python test_setup.py

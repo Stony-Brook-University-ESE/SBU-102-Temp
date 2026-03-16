@@ -28,36 +28,32 @@ A Python application that creates motivational YouTube videos with AI-generated 
 
 ---
 
-## IMPORTANT: Get Your OpenAI API Key First
+## IMPORTANT: Get Your Google Gemini API Key First (FREE!)
 
-Before you start, you need an OpenAI API key to generate the script and voiceover. Follow these steps:
+Great news! This project uses Google's Gemini AI which has a very generous FREE tier - perfect for university students. You won't need to pay anything!
 
-### How to Create an OpenAI API Key
+### How to Create a FREE Gemini API Key
 
-1. **Go to OpenAI's Platform**
-   - Visit: https://platform.openai.com/
-   - Sign in to your existing account, or create a new account if you don't have one
+1. **Go to Google AI Studio**
+   - Visit: https://aistudio.google.com/app/apikey
+   - Sign in with your Google account (use your university account if you have one)
 
-2. **Navigate to API Keys**
-   - Once logged in, click on your profile picture (top right corner)
-   - Select **"View API keys"** from the dropdown menu
-   - Or go directly to: https://platform.openai.com/api-keys
+2. **Create Your Free API Key**
+   - Click **"Create API key"** button
+   - Select **"Create API key in new project"** (recommended)
+   - Your API key will be generated instantly
 
-3. **Create a New API Key**
-   - Click the **"Create new secret key"** button
-   - Give your key a name (for example: "Video Generator Project")
-   - Click **"Create secret key"**
+3. **Copy Your API Key**
+   - Copy the key immediately and save it somewhere safe
+   - The key looks like: `AIzaSyA...` (starts with AIzaSy)
+   - You can always come back to view it later
 
-4. **Copy Your API Key**
-   - **IMPORTANT:** Copy the key immediately and save it somewhere safe
-   - The key starts with `sk-proj-` followed by a long string of characters
-   - You won't be able to see the full key again after you close this dialog
-
-5. **Add Credits to Your Account (If Needed)**
-   - New accounts may receive some free credits
-   - If you need more credits, go to: https://platform.openai.com/settings/organization/billing
-   - Add a payment method and purchase credits ($5-10 is plenty for this project)
-   - Each video costs approximately $0.01-0.05 to generate
+4. **Why Gemini is Better for Students**
+   - **Completely FREE** with generous daily limits
+   - No credit card required
+   - Perfect for educational projects
+   - Very fast and high-quality responses
+   - Much more accessible than paid alternatives
 
 ### Security Reminder
 - **Never share your API key with others**
@@ -103,15 +99,9 @@ You need to provide a background video file for your motivational video.
 
 **Important:** The file must be named exactly `background.mp4` and be in the same folder as `main.py`.
 
-### Step 3: Get Your OpenAI API Key
+### Step 3: Set Up Your FREE Gemini API Key
 
-1. Go to https://platform.openai.com/
-2. Sign in or create an account if you don't have one
-3. Click on your profile (top right) -> **View API keys**
-4. Click **Create new secret key**
-5. Give it a name (like "Video Generator")
-6. Copy the API key (it starts with `sk-proj-...`)
-7. **Keep this key safe and secret!**
+You already got your API key from https://aistudio.google.com/app/apikey in the first section. Now let's set it up securely.
 
 ### Step 4: Set Up Your API Key (Choose One Method)
 
@@ -119,12 +109,12 @@ You need to provide a background video file for your motivational video.
 
 In the Codespace terminal, run:
 ```bash
-export OPENAI_API_KEY="paste-your-actual-key-here"
+export GEMINI_API_KEY="paste-your-actual-key-here"
 ```
 
 To verify it's set correctly:
 ```bash
-echo $OPENAI_API_KEY
+echo $GEMINI_API_KEY
 ```
 
 **Method B: Environment File (Recommended)**
@@ -139,13 +129,14 @@ echo $OPENAI_API_KEY
    code .env
    ```
 
-3. Replace `your-openai-api-key-here` with your actual API key
+3. Replace `your-gemini-api-key-here` with your actual API key
 4. Save the file (Ctrl+S)
 
 **Important Security Notes:**
 - Never paste your API key directly into `main.py`
 - The `.env` file is automatically ignored by git (won't be committed)
 - If you close the Codespace, you may need to set the environment variable again
+- **Good news:** No payment required - Gemini API is free for students!
 
 ### Step 5: Build the Docker Container
 
@@ -158,7 +149,8 @@ docker compose build
 This will take a few minutes the first time. You'll see it downloading and installing:
 - Python 3.11
 - ffmpeg (for video processing)
-- OpenAI Python library
+- Google Generative AI library (Gemini)
+- gTTS (Google Text-to-Speech - also free!)
 - MoviePy (for video editing)
 
 ### Step 5.5: Test Your Setup (Optional but Recommended)
@@ -190,8 +182,8 @@ docker compose run --rm app
 1. The program will ask you for a motivational topic
 2. Type something like "overcoming challenges" or "staying focused" and press Enter
 3. The program will:
-   - Generate a motivational script using ChatGPT
-   - Create a voiceover using OpenAI's text-to-speech
+   - Generate a motivational script using Google Gemini AI (free!)
+   - Create a voiceover using Google Text-to-Speech (also free!)
    - Combine the audio with your background video
    - Save the final MP4 file
 
@@ -226,7 +218,7 @@ Each time you run this command, it will overwrite the previous files, so downloa
 ## Troubleshooting Common Issues
 
 ### "API key missing" error
-- **Solution:** Re-run the export command: `export OPENAI_API_KEY="your-key"`  
+- **Solution:** Re-run the export command: `export GEMINI_API_KEY="your-key"`  
 - **Or:** Check that your `.env` file exists and contains the correct key
 
 ### "background.mp4 not found" error  
@@ -247,8 +239,9 @@ Each time you run this command, it will overwrite the previous files, so downloa
 - **Tip:** Use shorter background videos (10-30 seconds) for faster testing
 
 ### Out of API credits
-- **Check:** Your OpenAI account balance at https://platform.openai.com/usage
-- **Solution:** Add credits to your OpenAI account
+- **Great News:** This shouldn't happen! Gemini API has a generous free tier
+- **Check:** Your usage at https://aistudio.google.com/app/apikey
+- **Solution:** The free tier should be more than enough for this project
 
 ---
 
@@ -263,7 +256,7 @@ Each time you run this command, it will overwrite the previous files, so downloa
 
 - The topic they enter when prompted
 - The `background.mp4` file (try different background videos)
-- **Advanced:** Modify `main.py` to change the voice type (line 67: change "alloy" to "echo", "fable", "onyx", "nova", or "shimmer")
+- **Advanced:** Modify `main.py` to change the TTS language (line 64: change 'en' to 'es', 'fr', 'de', etc.)
 
 ---
 
@@ -276,12 +269,13 @@ Each time you run this command, it will overwrite the previous files, so downloa
 - **Environment:** `OPENAI_API_KEY` passed from host to container
 
 ### API Usage
-- **Text Generation:** OpenAI GPT-3.5-turbo (generates motivational scripts)
-- **Audio Generation:** OpenAI TTS-1 with "alloy" voice (creates voiceovers)
-- **Estimated Cost:** Approximately $0.01-0.05 per video (depending on script length)
+- **Text Generation:** Google Gemini 1.5 Flash (generates motivational scripts - FREE!)
+- **Audio Generation:** Google Text-to-Speech (gTTS - also FREE!)
+- **Estimated Cost:** $0.00 - Completely free for students!
 
 ### Dependencies
-- `openai>=1.0.0` - OpenAI Python client library
+- `google-generativeai>=0.3.0` - Google Gemini AI client library
+- `gTTS>=2.3.0` - Google Text-to-Speech (free)
 - `moviepy>=1.0.3` - Video editing and processing
 
 ### File Flow
@@ -310,10 +304,10 @@ docker compose run --rm app
 docker compose build --no-cache
 
 # Set API key (if not using .env file)
-export OPENAI_API_KEY="your-key-here"
+export GEMINI_API_KEY="your-key-here"
 
 # Check API key is set
-echo $OPENAI_API_KEY
+echo $GEMINI_API_KEY
 ```
 
 ## Files Created Each Run
