@@ -168,27 +168,41 @@ mv final_video.mp4 my_motivation_video_1.mp4
 
 ---
 
-## Understanding .sh vs .yml: Which Tool for Which Job?
+## Understanding .sh vs .yml: Beginner's Guide
 
-| Aspect | Bash Script (.sh) | Docker Compose (.yml) |
-|--------|-------------------|----------------------|
-| **What** | Shell commands in a file | Declarative container configuration |
-| **How** | `chmod +x run.sh && ./run.sh` | `docker compose up --build` |
-| **Why Use** | Simple automation, custom logic | Professional container orchestration |
-| **When Use** | Quick scripts, complex workflows | Multi-container apps, team projects |
+### Quick Comparison: Which Should You Use?
 
-### Simple Examples
+| Feature | Bash Script (.sh) | Docker Compose (.yml) |
+|---------|-------------------|----------------------|
+| **What Is It?** | Shell commands in a file | Container configuration file |
+| **Why Use It?** | Easy to learn, flexible | Industry standard, professional |
+| **Where Is Code?** | All in `run.sh` | Split: `docker-compose.yml` + `Dockerfile` |
+| **Command to Run** | `./run.sh` | `docker compose up --build` |
+| **Best For** | Learning Docker basics | Real projects, teams |
+| **Our Project** | ✓ Current approach | → Your homework assignment! |
 
-#### Bash Script Example (.sh)
+### Detailed Breakdown for This Project
+
+| Step | What Happens | Bash Script (.sh) | Docker Compose (.yml) |
+|------|-------------|-------------------|----------------------|
+| **Build** | Create Docker image | `docker build -t myapp .` | `build: .` (in YAML) |
+| **Environment** | Set API key | `read -p "API Key:" KEY` | `GEMINI_API_KEY=${GEMINI_API_KEY}` |
+| **Run** | Start container | `docker run --rm -i -v $(pwd):/app myapp` | `docker compose up` |
+| **Cleanup** | Remove containers | Manual cleanup commands | Automatic with `--rm` |
+| **File Location** | Everything in `run.sh` | Configuration in `docker-compose.yml` |
+
+### Code Examples
+
+#### Current Bash Script (run.sh)
 ```bash
 #!/bin/bash
 echo "Building image..."
-docker build -t myapp .
-echo "Running container..."
-docker run --rm myapp
+docker build -t motivational-video-generator .
+read -p "API Key: " GEMINI_API_KEY
+docker run --rm -i -v "$(pwd):/app" -e GEMINI_API_KEY="$GEMINI_API_KEY" motivational-video-generator
 ```
 
-#### Docker Compose Example (.yml)
+#### Your Homework: Docker Compose (docker-compose.yml)
 ```yaml
 version: '3.8'
 services:
@@ -196,7 +210,21 @@ services:
     build: .
     volumes:
       - .:/app
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    stdin_open: true
+    tty: true
 ```
+
+### Why Learn Both?
+
+| Skill Level | Recommended Approach | Reason |
+|-------------|---------------------|---------|
+| **Beginner** | Start with `.sh` | Easy to understand, see each command |
+| **Intermediate** | Learn `.yml` | Industry standard, more maintainable |
+| **Professional** | Use `.yml` | Team collaboration, scalability |
+
+**Your Mission:** Use the `.sh` script first, then complete the homework to convert it to `.yml`!
 
 ### Pros and Cons
 
@@ -211,15 +239,20 @@ services:
 
 ---
 
-## Homework Challenge: Convert to Docker Compose
+## Homework Assignment: Convert from .sh to .yml
 
-**Question:** Can we replace the `run.sh` bash script with a `docker-compose.yml` file?
+**Now that you understand both approaches from the comparison table above, it's time to practice!**
 
-**Answer:** YES! Docker Compose is actually the more professional way to manage Docker applications.
+**Your Challenge:** Convert your working `run.sh` script to a professional `docker-compose.yml` file.
+
+**Why This Matters:** 
+- Real companies use Docker Compose, not bash scripts
+- You'll understand both beginner and professional approaches
+- Great for your resume and job interviews
 
 ### Your Assignment
 
-Create a `docker-compose.yml` file that does the same job as `run.sh`. This will teach you industry-standard container orchestration.
+Create a `docker-compose.yml` file that replaces `run.sh` completely. Use the code examples from the comparison table above as your starting point.
 
 ### What You Need to Convert
 
