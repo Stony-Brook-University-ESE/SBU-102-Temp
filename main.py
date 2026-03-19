@@ -2,9 +2,9 @@
 
 import os
 import sys
-import google.generativeai as genai
+import google.genai as genai
 from gtts import gTTS
-from moviepy.editor import VideoFileClip, AudioFileClip, CompositeVideoClip
+from moviepy import VideoFileClip, AudioFileClip, CompositeVideoClip
 
 def check_requirements():
     """Check if all required files and environment variables are present"""
@@ -31,9 +31,9 @@ def generate_script(topic):
     
     print("Generating motivational script...")
     
-    # Configure Gemini API
-    genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Configure Gemini API with new client
+    api_key = os.getenv('GEMINI_API_KEY')
+    client = genai.Client(api_key=api_key)
     
     prompt = f"""Write a motivational and inspiring script about {topic}. 
     The script should be:
@@ -45,7 +45,11 @@ def generate_script(topic):
     Please write only the script text, no additional formatting or instructions."""
     
     try:
-        response = model.generate_content(prompt)
+        # Use the new API to generate content with the latest model
+        response = client.models.generate_content(
+            model='models/gemini-2.5-flash',
+            contents=prompt
+        )
         script = response.text.strip()
         
         # Save script to file
@@ -95,16 +99,16 @@ def create_final_video():
         
         # If video is longer than audio, trim the video
         if video.duration > audio_duration:
-            video = video.subclip(0, audio_duration)
+            video = video.with_duration(audio_duration)
         # If audio is longer than video, loop the video
         elif audio_duration > video.duration:
             # Calculate how many times to loop the video
             loops_needed = int(audio_duration / video.duration) + 1
             video_clips = [video] * loops_needed
-            video = CompositeVideoClip(video_clips).subclip(0, audio_duration)
+            video = CompositeVideoClip(video_clips).with_duration(audio_duration)
         
         # Set the audio of the video to our voiceover
-        final_video = video.set_audio(audio)
+        final_video = video.with_audio(audio)
         
         # Write the final video file
         final_video.write_videofile(
